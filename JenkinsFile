@@ -38,6 +38,8 @@ pipeline {
                     chmod +x gradlew
                     ./gradlew clean build
                     ls -al ./build
+
+                    docker build -t healthcare.kr.ncr.ntruss.com/pipeline-docker-image -f Dockerfile
                     """
                 }
             }
