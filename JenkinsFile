@@ -1,0 +1,64 @@
+pipeline {
+    agent any
+
+    // triggers {
+    //     pollSCM('*/3 * * * *')
+    // }
+
+    stages {
+        // 레포지토리를 다운로드 받음
+        stage('Repository Prepare') {
+            agent any
+            steps {
+                echo 'Clonning Repository'
+                checkout scm
+            }
+
+            post {
+                // If Maven was able to run the tests, even if some of the test
+                // failed, record the test results and archive the jar file.
+                success {
+                    echo 'Successfully Cloned Repository'
+                }
+                always {
+                  echo "i tried..."
+                }
+                cleanup {
+                  echo "after all other post condition"
+                }
+            }
+        }
+
+        stage('Bulid gradle & Image') {
+            agent any
+            steps {
+                echo 'Build Backend'
+                dir ('./'){
+                    sh """
+                    chmod +x gradlew
+                    ./gradlew clean build
+                    ls -al ./build
+                    """
+                }
+            }
+
+            post {
+                success {
+                    echo 'Successfully Image Build'
+                }
+
+                failure {
+                  error 'This pipeline stops here...'
+                }
+            }
+        }
+
+        stage('Push Image') {
+            echo 'registry push'
+            // docker.withRegistry('YOUR_REGISTRY', 'YOUR_CREDENTIAL') {
+            //     app.push("${env.BUILD_NUMBER}")
+            //     app.push("latest")
+            // }
+        }
+    }
+}
