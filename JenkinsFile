@@ -54,7 +54,10 @@ pipeline {
         }
 
         stage('Push Image') {
-            echo 'registry push'
+            steps {
+                echo 'registry push'
+            }
+            
             // docker.withRegistry('YOUR_REGISTRY', 'YOUR_CREDENTIAL') {
             //     app.push("${env.BUILD_NUMBER}")
             //     app.push("latest")
