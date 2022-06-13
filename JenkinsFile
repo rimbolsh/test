@@ -39,7 +39,7 @@ pipeline {
                     ./gradlew clean build
                     ls -al ./build
 
-                    docker build -t healthcare.kr.ncr.ntruss.com/pipeline-docker-image -f DockerFile
+                    docker build -t healthcare.kr.ncr.ntruss.com/pipeline-docker-image -f DockerFile .
                     """
                 }
             }
