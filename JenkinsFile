@@ -4,6 +4,9 @@ pipeline {
     // triggers {
     //     pollSCM('*/3 * * * *')
     // }
+    parameters {
+        string(name: VERSION, defaultValue: '0.0.1')
+    }
 
     stages {
         // 레포지토리를 다운로드 받음
@@ -29,26 +32,20 @@ pipeline {
             }
         }
 
-        stage('Build version') {
-            agent any
-            steps {
-                echo 'Build version'
+         echo 'Build version'
                 def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'").trim()
                 sh "echo Project in version value: $version_value"
                 def version = version_value.split(/=/)[1]
                 sh "echo final version: $version"
-            }
 
-            post {
-                success {
-                    echo 'Build version'
-                }
-
-                failure {
-                  error 'This pipeline stops here...'
+        stage('Build version') {
+            steps {
+                script {
+                    VERSION = sh(script: "cat build.gradle | grep -o 'version = [^,]*'", returnStdout: true).trim().split(/=/)[1]
+                    echo "** version: ${VERSION} **"
                 }
             }
-        }
+        }  
 
         stage('Bulid gradle & Image') {
             agent any
