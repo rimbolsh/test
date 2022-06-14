@@ -21,10 +21,31 @@ pipeline {
                     echo 'Successfully Cloned Repository'
                 }
                 always {
-                  echo "i tried..."
+                    echo "i tried..."
                 }
                 cleanup {
-                  echo "after all other post condition"
+                    echo "after all other post condition"
+                }
+            }
+        }
+
+        stage('Build version') {
+            agent any
+            steps {
+                echo 'Build version'
+                def version_value = sh(returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'").trim()
+                sh "echo Project in version value: $version_value"
+                def version = version_value.split(/=/)[1]
+                sh "echo final version: $version"
+            }
+
+            post {
+                success {
+                    echo 'Build version'
+                }
+
+                failure {
+                  error 'This pipeline stops here...'
                 }
             }
         }
@@ -35,6 +56,8 @@ pipeline {
                 echo 'Build Backend'
                 dir ('./'){
                     sh """
+                    echo final version: $version
+
                     chmod +x gradlew
                     ./gradlew clean build
                     ls -al ./build
