@@ -36,9 +36,11 @@ pipeline {
             agent any
             steps {
                 script {
+                    echo "** version init : ${params.version} **"
                     def temp = sh( returnStatus: true, script: "cat build.gradle | grep -o 'version = [^,]*'" )
+                    echo "** version temp : ${temp} **"
                     params.version = temp.toString().trim()
-                    echo "** version: ${params.version} **"
+                    echo "** version load : ${params.version} **"
                 }
             }
         }  
