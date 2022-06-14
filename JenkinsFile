@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     echo "** version init : ${params.version} **"
-                    temp = sh(returnStatus: true, script: "ls").trim()
+                    temp = sh(returnStatus: true, script: "git log -n 1 --pretty=format:'%h'").trim()
                     // sh( returnStatus: true, script: "cat build.gradle | grep -o 'version = [^,]*'" ).trim()
                     echo "** version temp : ${temp} **"
                     // params.version = temp.split[1]
