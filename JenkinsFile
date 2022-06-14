@@ -5,7 +5,7 @@ pipeline {
     //     pollSCM('*/3 * * * *')
     // }
     parameters {
-        string(name: VERSION, defaultValue: '0.0.1')
+        string(name: 'version', defaultValue: '0.0.1')
     }
 
     stages {
@@ -36,8 +36,8 @@ pipeline {
             agent any
             steps {
                 script {
-                    VERSION = sh(script: "cat build.gradle | grep -o 'version = [^,]*'", returnStdout: true).trim().split(/=/)[1]
-                    echo "** version: ${VERSION} **"
+                    params.version = sh(script: "cat build.gradle | grep -o 'version = [^,]*'", returnStdout: true).trim().split(/=/)[1]
+                    echo "** version: ${params.version} **"
                 }
             }
         }  
@@ -48,7 +48,7 @@ pipeline {
                 echo 'Build Backend'
                 dir ('./'){
                     sh """
-                    echo final version: $version
+                    echo final version: ${params.version}
 
                     chmod +x gradlew
                     ./gradlew clean build
