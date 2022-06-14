@@ -5,7 +5,7 @@ pipeline {
     //     pollSCM('*/3 * * * *')
     // }
     parameters {
-        string(name: 'version', defaultValue: '0.0.1')
+        string(name: 'version', defaultValue: '')
     }
 
     stages {
@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     def temp = sh( returnStatus: true, script: "cat build.gradle | grep -o 'version = [^,]*'" )
-                    params.version = temp.toString().trim().split(/=/)(1)
+                    params.version = temp.toString().trim().split(/=/)[1]
                     echo "** version: ${params.version} **"
                 }
             }
