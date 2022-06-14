@@ -37,7 +37,7 @@ pipeline {
             steps {
                 script {
                     def temp = sh( returnStatus: true, script: "cat build.gradle | grep -o 'version = [^,]*'" )
-                    params.version = temp.toString().trim().split(/=/)[1]
+                    params.version = temp.toString().trim()
                     echo "** version: ${params.version} **"
                 }
             }
