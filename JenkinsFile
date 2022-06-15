@@ -42,7 +42,7 @@ pipeline {
                     echo "** version params : ${params} **"
                     tempSplit = temp.split(/=/)[1]
                     echo "** version temp : ${tempSplit} **"
-                    params.put("version", tempSplit)
+                    // params.put("version", tempSplit)
                     echo "** version load : ${params.version} **"
                 }
             }
