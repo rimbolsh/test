@@ -42,6 +42,7 @@ pipeline {
                     echo "** version temp : ${version} **"
                     
                     version = version.split(/=/)[1]
+                    version = version.replaceAll("'","")
                     // params.put("version", tempSplit)
                     echo "** version load : ${version} **"
                 }
@@ -79,12 +80,11 @@ pipeline {
             agent any
             steps {
                 echo 'build & registry push'
-                echo "${version}"
                 
                 script {
                     docker.withRegistry("https://healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
                         def customImage = docker.build("${params.projectName}")
-                        customImage.push(latest)
+                        customImage.push("latest")
                         customImage.push(version)
                     }
                 }
