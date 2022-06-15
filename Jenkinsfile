@@ -82,7 +82,7 @@ pipeline {
                 
                 script {
                     docker.withRegistry("https://healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
-                        def customImage = docker.build(params.projectName)
+                        def customImage = docker.build("${params.projectName}:latest")
                         customImage.push(version)
                     }
                 }
