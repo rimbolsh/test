@@ -5,8 +5,8 @@ pipeline {
     //     pollSCM('*/3 * * * *')
     // }
     parameters {
-        string(name: 'version', defaultValue: '')
-    }
+        string(name: 'projectName', defaultValue: 'pipeline-docker-image')
+    }  
 
     stages {
         // 레포지토리를 다운로드 받음
@@ -36,32 +36,28 @@ pipeline {
             agent any
             steps {
                 script {
-                    echo "** version init : ${params.version} **"
-                    temp = sh( returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'" ).trim()
-                    echo "** version temp : ${temp} **"
-                    echo "** version params : ${params} **"
-                    tempSplit = temp.split(/=/)[1]
-                    echo "** version temp : ${tempSplit} **"
+                    // echo "** version init : ${params.version} **"
+                    def version = sh( returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'" ).trim()
+                    echo "** version temp : ${version} **"
+                    
+                    version = version.split(/=/)[1]
                     // params.put("version", tempSplit)
-                    echo "** version load : ${params.version} **"
+                    echo "** version load : ${version} **"
                 }
             }
-        }  
-
-        stage('Bulid gradle & Image') {
+        }
+        stage('Bulid gradle') {
             agent any
             steps {
                 echo 'Build Backend'
                 dir ('./'){
                     sh """
-                    echo "** version temp : ${tempSplit} **"
-                    echo final version: ${params.version}
+                    echo final version: ${version}
 
                     chmod +x gradlew
                     ./gradlew clean build
                     ls -al ./build
 
-                    sudo docker build -t healthcare.kr.ncr.ntruss.com/pipeline-docker-image -f DockerFile .
                     """
                 }
             }
@@ -77,15 +73,15 @@ pipeline {
             }
         }
 
-        stage('Push Image') {
+        stage('docker Image build & push') {
             steps {
-                echo 'registry push'
+                echo 'build & registry push'
             }
             
-            // docker.withRegistry('YOUR_REGISTRY', 'YOUR_CREDENTIAL') {
-            //     app.push("${env.BUILD_NUMBER}")
-            //     app.push("latest")
-            // }
+            docker.withRegistry("healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
+                def customImage = docker.build(params.projectName)
+                customImage.push(version)
+            }
         }
     }
 }
