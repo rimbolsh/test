@@ -81,7 +81,7 @@ pipeline {
                 echo 'build & registry push'
                 
                 script {
-                    docker.withRegistry("healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
+                    docker.withRegistry("https://healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
                         def customImage = docker.build(params.projectName)
                         customImage.push(version)
                     }
