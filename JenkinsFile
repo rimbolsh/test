@@ -54,6 +54,7 @@ pipeline {
                 echo 'Build Backend'
                 dir ('./'){
                     sh """
+                    echo "** version temp : ${tempSplit} **"
                     echo final version: ${params.version}
 
                     chmod +x gradlew
