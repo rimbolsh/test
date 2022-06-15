@@ -77,12 +77,16 @@ pipeline {
             agent any
             steps {
                 echo 'build & registry push'
+                
+                script {
+                    docker.withRegistry("healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
+                        def customImage = docker.build(params.projectName)
+                        customImage.push(version)
+                    }
+                }
             }
             
-            docker.withRegistry("healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
-                def customImage = docker.build(params.projectName)
-                customImage.push(version)
-            }
+            
         }
     }
 }
