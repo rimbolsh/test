@@ -74,6 +74,7 @@ pipeline {
         }
 
         stage('docker Image build & push') {
+            agent any
             steps {
                 echo 'build & registry push'
             }
