@@ -1,3 +1,4 @@
+def version
 pipeline {
     agent any
 
@@ -37,7 +38,7 @@ pipeline {
             steps {
                 script {
                     // echo "** version init : ${params.version} **"
-                    def version = sh( returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'" ).trim()
+                    version = sh( returnStdout: true, script: "cat build.gradle | grep -o 'version = [^,]*'" ).trim()
                     echo "** version temp : ${version} **"
                     
                     version = version.split(/=/)[1]
@@ -46,6 +47,7 @@ pipeline {
                 }
             }
         }
+        
         stage('Bulid gradle') {
             agent any
             steps {
