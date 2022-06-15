@@ -79,10 +79,12 @@ pipeline {
             agent any
             steps {
                 echo 'build & registry push'
+                echo "${version}"
                 
                 script {
                     docker.withRegistry("https://healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
-                        def customImage = docker.build("${params.projectName}:latest")
+                        def customImage = docker.build("${params.projectName}")
+                        customImage.push(latest)
                         customImage.push(version)
                     }
                 }
