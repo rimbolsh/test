@@ -83,7 +83,7 @@ pipeline {
                 
                 script {
                     docker.withRegistry("https://healthcare.kr.ncr.ntruss.com", 'dockerRegistry') {
-                        def customImage = docker.build("healthcare.kr.ncr.ntruss.com/${params.projectName}:${version}")
+                        def customImage = docker.build("healthcare.kr.ncr.ntruss.com/${params.projectName}:${version}", "--build-arg JAR_VERSION=${version}")
                         customImage.push()
                     }
                 }

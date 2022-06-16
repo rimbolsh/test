@@ -1,5 +1,6 @@
+ARG JAR_VERSION
 FROM openjdk:8-jre-slim
-COPY build/libs/demo-0.0.1-SNAPSHOT.jar /usr/src/test/
+COPY build/libs/demo-$JAR_VERSION.jar /usr/src/test/
 WORKDIR /usr/src/test
  
 RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
