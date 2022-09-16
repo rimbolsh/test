@@ -91,5 +91,18 @@ pipeline {
             
             
         }
+
+        stage('ssh docker pull') {
+            agent any
+            steps {
+                echo 'ssh'
+                
+                sshagent(['deploy-test']) {
+                    sh 'ssh -o StrictHostKeyChecking=no 10.41.152.227 docker ps'
+                }
+            }
+            
+            
+        }
     }
 }
