@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
+    @Value("${spring.profiles.active:}") private String activeProfile;
+
     @GetMapping("/")
     public String getHealth() {
         return "healthCheck";
+    }
+
+    @GetMapping("/profile")
+    public String getActiveProfile() {
+        return activeProfile;
     }
 
     @PostMapping("/user")

@@ -98,7 +98,8 @@ pipeline {
                 echo 'ssh'
                 
                 sshagent(['jenkins-deploy']) {
-                    sh 'ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker ps'
+                    sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker rm -f ${params.projectName}"
+                    sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker run -p 8888:8888 -d --restart=always -e USE_PROFILE=dev --name ${params.projectName} healthcare.kr.ncr.ntruss.com/${params.projectName}:${version}"
                 }
             }
             
