@@ -93,13 +93,14 @@ pipeline {
             
         }
 
-        stage('ssh docker pull') {
+        stage('ssh docker pull & run') {
             agent any
             steps {
-                echo 'ssh'
+                echo 'docker pull & run'
                 
                 sshagent(['jenkins-deploy']) {
-                    sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 'docker ps -q --filter name=${params.projectName} | grep Exit && docker rm -f \$(docker ps -aq --filter name=${params.projectName})'"
+                    sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker ps -a"
+                    sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker ps -q --filter name=${params.projectName} | grep Exit && docker rm -f \$(docker ps -aq --filter name=${params.projectName})"
                     sh "ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker run -p 8888:8888 -d --restart=always -e USE_PROFILE=${params.profile} --name ${params.projectName} healthcare.kr.ncr.ntruss.com/${params.projectName}:${params.profile}-${version}"
                 }
             }
