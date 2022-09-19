@@ -6,4 +6,4 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Seoul /etc/localtime
 
 ENV	USE_PROFILE local
 
-ENTRYPOINT ["java", "-Dspring.profiles.active=${USE_PROFILE}", "-jar", "demoApp.jar"]
+# ENTRYPOINT ["java", "-Dspring.profiles.active=${USE_PROFILE}", "-jar", "demoApp.jar"]
