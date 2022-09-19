@@ -6,7 +6,7 @@ pipeline {
     //     pollSCM('*/3 * * * *')
     // }
     parameters {
-        string(name: 'projectName', defaultValue: 'pipeline-docker-image-rimbo')
+        string(name: 'projectName', defaultValue: 'pipeline-docker-image')
     }  
 
     stages {
@@ -98,7 +98,7 @@ pipeline {
                 echo 'ssh'
                 
                 sshagent(['jenkins-deploy']) {
-                    sh 'ssh -o StrictHostKeyChecking=no 10.41.152.227 docker ps'
+                    sh 'ssh -o StrictHostKeyChecking=no root@10.41.152.227 docker ps'
                 }
             }
             
